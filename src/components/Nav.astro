@@ -1,0 +1,60 @@
+---
+import { business, nav } from '../data/business';
+import Icon from './Icon.astro';
+
+const base = import.meta.env.BASE_URL;
+const current = Astro.url.pathname;
+
+function hrefFor(path: string) {
+  return `${base}${path}`;
+}
+
+function isCurrent(path: string) {
+  const target = hrefFor(path);
+  if (path === '') return current === base;
+  return current.startsWith(target);
+}
+---
+
+<header class="nav">
+  <a class="brand" href={base}>
+    <span class="mark" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span>Little Details</span>
+  </a>
+  <button class="nav-burger" type="button" aria-expanded="false" aria-controls="site-menu" data-nav-toggle>
+    <span class="sr-only">Menu</span>
+    <span class="burger-open"><Icon name="list" /></span>
+    <span class="burger-close"><Icon name="x" /></span>
+  </button>
+  <nav id="site-menu" class="nav-links" data-nav-links aria-label="Main">
+    {
+      nav.map((item) => (
+        <a href={hrefFor(item.path)} aria-current={isCurrent(item.path) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+    <a class="nav-call" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+  </nav>
+</header>
+
+<script is:inline>
+  const btn = document.querySelector('[data-nav-toggle]');
+  const links = document.querySelector('[data-nav-links]');
+  if (btn && links) {
+    const setOpen = (open) => {
+      btn.setAttribute('aria-expanded', String(open));
+      links.classList.toggle('is-open', open);
+      document.body.classList.toggle('nav-open', open);
+    };
+    btn.addEventListener('click', () => {
+      setOpen(btn.getAttribute('aria-expanded') !== 'true');
+    });
+    links.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+  }
+</script>

@@ -1,0 +1,60 @@
+---
+import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro';
+import { areas } from '../../data/areas';
+import { business } from '../../data/business';
+import { absoluteUrl } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return areas.map((area) => ({
+    params: { slug: area.slug },
+    props: { area },
+  }));
+}
+
+const { area } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const pageUrl = absoluteUrl(Astro.site, Astro.url.pathname);
+const siteUrl = absoluteUrl(Astro.site, base);
+const schema = {
+  '@type': 'Service',
+  name: `Visit the Sandy workshop from ${area.name}`,
+  serviceType: 'Used car sales and vehicle preparation',
+  description: area.description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}#business` },
+  areaServed: {
+    '@type': 'City',
+    name: `${area.name}, ${area.county}`,
+  },
+};
+---
+
+<Base
+  title={`Visit from ${area.name}`}
+  description={area.description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Areas', path: 'areas/' },
+    { name: area.name, path: `areas/${area.slug}/` },
+  ]}
+  extraSchema={[schema]}
+>
+  <header class="page-hero">
+    <p class="kicker">{area.county}</p>
+    <h1>{area.name} to Sandy</h1>
+    <p>{area.lede}</p>
+  </header>
+  <article class="section prose">
+    {area.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    <p>
+      {business.street}, {business.locality} {business.postalCode}. Phone {business.phoneDisplay}.
+    </p>
+    <p>
+      <a class="btn" href={`${base}contact/`}>
+        Plan the visit
+        <span class="btn-arrow"><Icon name="arrow-right" /></span>
+      </a>
+    </p>
+  </article>
+</Base>

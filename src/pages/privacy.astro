@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { business } from '../data/business';
+
+const description =
+  'Privacy notes for The Little Details website. The site does not use a contact form or analytics cookies.';
+---
+
+<Base
+  title="Privacy"
+  description={description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Privacy', path: 'privacy/' },
+  ]}
+>
+  <header class="page-hero">
+    <p class="kicker">Privacy</p>
+    <h1>What this site stores</h1>
+  </header>
+  <article class="section prose">
+    <p>
+      This site is for {business.legalName}, company number {business.companyNumber}, of {business.street}, {business.locality} {business.postalCode}.
+    </p>
+    <p>
+      The site does not have a contact form. It does not run advertising or analytics cookies. A normal visit does not ask for your name or email.
+    </p>
+    <p>
+      The map on the contact page stays unloaded until you press the button. After that, Google may set its own cookies. You can use the directions link instead and never load the map.
+    </p>
+    <p>
+      Phone calls and texts go through your mobile network, not through this website.
+    </p>
+    <p>
+      The host of the site may keep standard connection logs, such as an IP address and the page requested. Those logs are for security and are not used to build a marketing profile.
+    </p>
+    <p>
+      Photos and review quotes come from the public Google listing. If you wrote a review and want the quote taken off this site, call {business.phoneDisplay}.
+    </p>
+  </article>
+</Base>

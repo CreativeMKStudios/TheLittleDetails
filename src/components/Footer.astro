@@ -1,0 +1,66 @@
+---
+import { areas } from '../data/areas';
+import { business, nav } from '../data/business';
+import Icon from './Icon.astro';
+
+const base = import.meta.env.BASE_URL;
+const year = 2026;
+---
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href={base}>
+        <span class="mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Little Details</span>
+      </a>
+      <p>Used cars and careful prep at a Sandy workshop. Call before you travel.</p>
+    </div>
+    <div>
+      <h2>Navigation</h2>
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={`${base}${item.path}`}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <h2>Visit from</h2>
+      <ul>
+        <li><a href={`${base}areas/`}>All areas</a></li>
+        {
+          areas.map((area) => (
+            <li>
+              <a href={`${base}areas/${area.slug}/`}>{area.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <h2>Contact</h2>
+      <ul class="contact-list">
+        <li>
+          <Icon name="map-pin" />
+          <span>{business.street}, {business.locality} {business.postalCode}</span>
+        </li>
+        <li>
+          <Icon name="phone" />
+          <a href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+        </li>
+        <li>
+          <Icon name="arrow-right" />
+          <a href={business.mapsUrl}>Google listing</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-base">
+    <p>© {year} {business.legalName}. Company number {business.companyNumber}.</p>
+    <p><a href={`${base}privacy/`}>Privacy</a></p>
+  </div>
+</footer>

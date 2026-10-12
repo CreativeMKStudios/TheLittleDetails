@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { business } from '../data/business';
+
+const description =
+  'The Little Details Vehicle Enhancements Ltd is a Sandy workshop run by director David Richard Oram. Company number 13427456.';
+---
+
+<Base
+  title="About the Sandy workshop"
+  description={description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'About', path: 'about/' },
+  ]}
+>
+  <header class="page-hero">
+    <p class="kicker">About</p>
+    <h1>A small workshop with a clear record</h1>
+    <p>
+      The Little Details Vehicle Enhancements prepares and sells used cars from one unit in Sandy. The person buyers deal with is David.
+    </p>
+  </header>
+  <article class="section prose">
+    <p>
+      The limited company was incorporated on {business.incorporated}. The company number is {business.companyNumber}. David Richard Oram is the director. Some reviews call him Dave.
+    </p>
+    <p>
+      Companies House lists two kinds of work: sale of used cars and light motor vehicles, and maintenance and repair of motor vehicles. Google lists the business as a used car dealer.
+    </p>
+    <p>
+      Reviews from 2023 also name Jason. He was a shareholder until 30 August 2024. This site does not claim he still works here. David is the current director.
+    </p>
+    <p>
+      There is no published price list, finance plan, or opening hours. If a page does not state a fact, it is because the Google listing and the company record do not state it either.
+    </p>
+    <p>
+      <a href={business.companiesHouseUrl}>Company record on GOV.UK</a>
+    </p>
+    <p>
+      <a href={business.mapsUrl}>Google listing</a>
+    </p>
+  </article>
+</Base>

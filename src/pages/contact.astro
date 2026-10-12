@@ -1,0 +1,63 @@
+---
+import Icon from '../components/Icon.astro';
+import Base from '../layouts/Base.astro';
+import { business } from '../data/business';
+
+const description =
+  'Call The Little Details on 07968 593591. The workshop is Unit 2a, 1 Stockton End, Sandy, SG19 1SB.';
+---
+
+<Base
+  title="Contact the Sandy workshop"
+  description={description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Contact', path: 'contact/' },
+  ]}
+>
+  <header class="page-hero">
+    <p class="kicker">Contact</p>
+    <h1>Call before you travel</h1>
+    <p>
+      There is no email address on the Google listing, and this site does not take messages through a form. The phone is the way to reach David.
+    </p>
+  </header>
+  <div class="contact-grid">
+    <div class="stack">
+      <a class="phone-link" href={`tel:${business.phoneTel}`}>{business.phoneDisplay}</a>
+      <p>{business.street}<br />{business.locality}<br />{business.region}<br />{business.postalCode}</p>
+      <p>Opening hours are not published. A text or a call is the safe way to check David is in.</p>
+      <div class="actions">
+        <a class="btn" href={`tel:${business.phoneTel}`}>
+          Call
+          <span class="btn-arrow"><Icon name="phone" /></span>
+        </a>
+        <a class="btn" href={`sms:${business.phoneTel}`}>
+          Text
+          <span class="btn-arrow"><Icon name="arrow-right" /></span>
+        </a>
+        <a class="text-link" href={business.mapsUrl}>Directions</a>
+      </div>
+    </div>
+    <div class="map-panel" id="map-panel">
+      <p>The map stays off until you ask for it. Google may set cookies once it loads.</p>
+      <button class="btn" type="button" id="load-map">
+        Load the map
+        <span class="btn-arrow"><Icon name="map-pin" /></span>
+      </button>
+    </div>
+  </div>
+</Base>
+
+<script is:inline>
+  const button = document.getElementById('load-map');
+  const panel = document.getElementById('map-panel');
+  button?.addEventListener('click', () => {
+    const frame = document.createElement('iframe');
+    frame.title = 'Map showing Unit 2a, 1 Stockton End, Sandy';
+    frame.src = 'https://maps.google.com/maps?q=52.1357442,-0.2840952&z=16&output=embed';
+    frame.loading = 'lazy';
+    frame.referrerPolicy = 'no-referrer-when-downgrade';
+    panel.replaceChildren(frame);
+  });
+</script>

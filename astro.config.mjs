@@ -13,4 +13,9 @@ export default defineConfig({
   build: {
     format: 'directory',
   },
+  vite: {
+    preview: {
+      allowedHosts: true,
+    },
+  },
 });

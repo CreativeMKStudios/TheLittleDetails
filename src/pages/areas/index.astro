@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import { areas } from '../../data/areas';
+
+const base = import.meta.env.BASE_URL;
+const description =
+  'The Little Details is in Sandy. Buyers visit from Biggleswade, Potton, Gamlingay, St Neots, and Bedford.';
+---
+
+<Base
+  title="Areas near Sandy"
+  description={description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Areas', path: 'areas/' },
+  ]}
+>
+  <header class="page-hero">
+    <p class="kicker">Areas</p>
+    <h1>One workshop, nearby towns</h1>
+    <p>
+      You come to Unit 2a, Stockton End, Sandy. These pages are for people driving in from nearby towns. They are not claims of a shop in each town, and they are not a mobile detailing route.
+    </p>
+  </header>
+  <div class="section area-list">
+    {
+      areas.map((area) => (
+        <article class="area-card">
+          <p class="kicker">{area.county}</p>
+          <h2>{area.name}</h2>
+          <p>{area.distance}</p>
+          <p>{area.lede}</p>
+          <p>
+            <a href={`${base}areas/${area.slug}/`}>Visit notes for {area.name}</a>
+          </p>
+        </article>
+      ))
+    }
+  </div>
+</Base>

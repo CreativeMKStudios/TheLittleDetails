@@ -1,0 +1,59 @@
+---
+import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro';
+import { services } from '../../data/services';
+import { absoluteUrl } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const pageUrl = absoluteUrl(Astro.site, Astro.url.pathname);
+const siteUrl = absoluteUrl(Astro.site, base);
+
+const schema = {
+  '@type': 'Service',
+  name: service.title,
+  description: service.description,
+  url: pageUrl,
+  provider: { '@id': `${siteUrl}#business` },
+  areaServed: {
+    '@type': 'City',
+    name: 'Sandy, Bedfordshire',
+  },
+};
+---
+
+<Base
+  title={service.title}
+  description={service.description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Services', path: 'services/' },
+    { name: service.title, path: `services/${service.slug}/` },
+  ]}
+  extraSchema={[schema]}
+>
+  <header class="page-hero">
+    <p class="kicker">{service.kicker}</p>
+    <h1>{service.title}</h1>
+    <p>{service.lede}</p>
+  </header>
+  <article class="section prose">
+    {service.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    <ul class="point-list">
+      {service.points.map((point) => <li>{point}</li>)}
+    </ul>
+    <p>
+      <a class="btn" href={`tel:+447968593591`}>
+        Call 07968 593591
+        <span class="btn-arrow"><Icon name="arrow-right" /></span>
+      </a>
+    </p>
+  </article>
+</Base>

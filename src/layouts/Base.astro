@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import { business } from '../data/business';
+import { absoluteUrl, businessNode, crumbNode } from '../lib/schema';
+
+interface Crumb {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  crumbs?: Crumb[];
+  extraSchema?: Record<string, unknown>[];
+}
+
+const { title, description, crumbs = [], extraSchema = [] } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const pageUrl = absoluteUrl(Astro.site, Astro.url.pathname);
+const siteUrl = absoluteUrl(Astro.site, base);
+const imageUrl = absoluteUrl(Astro.site, `${base}og.jpg`);
+const fullTitle = title.includes('Little Details') ? title : `${title} | The Little Details`;
+
+const crumbHrefs = crumbs.map((crumb) => ({
+  name: crumb.name,
+  href: `${base}${crumb.path}`,
+}));
+
+const graph = [
+  businessNode(siteUrl, imageUrl),
+  ...(crumbHrefs.length ? [crumbNode(crumbHrefs, Astro.site)] : []),
+  ...extraSchema,
+];
+
+const json = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': graph,
+}).replace(/</g, '\\u003c');
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <link rel="alternate" hreflang="en-GB" href={pageUrl} />
+    <link rel="alternate" hreflang="x-default" href={pageUrl} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#070708" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content="Ford Fiesta and Ford Focus ST inside the Sandy workshop." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <script type="application/ld+json" set:html={json} />
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+    <Nav />
+    <main id="content">
+      {
+        crumbHrefs.length > 1 && (
+          <nav class="crumbs wrap" aria-label="Breadcrumb">
+            <ol>
+              {crumbHrefs.map((crumb, index) => (
+                <li>
+                  {index < crumbHrefs.length - 1 ? (
+                    <a href={crumb.href}>{crumb.name}</a>
+                  ) : (
+                    <span aria-current="page">{crumb.name}</span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

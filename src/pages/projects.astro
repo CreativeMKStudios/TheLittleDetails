@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects';
+import pair from '../assets/fiesta-and-focus.jpg';
+import z4 from '../assets/bmw-z4-outside.jpg';
+import interior from '../assets/interior-prep.jpg';
+import fiat from '../assets/fiat-500-workshop.jpg';
+
+const description =
+  'Real jobs from Google reviews: a Fiesta ST, a Focus ST estate, a C-Max, a Clio GT, first cars, and a gearbox prepared for export.';
+
+const photos = [
+  {
+    src: pair,
+    alt: 'Black Ford Fiesta and red Ford Focus ST inside the workshop.',
+    caption: 'A Fiesta and a Focus ST in the unit. Photo from the Google listing. This is not a live stock list.',
+  },
+  {
+    src: z4,
+    alt: 'Blue BMW Z4 outside the Stockton End unit.',
+    caption: 'A BMW Z4 outside the unit on Stockton End. Photo from the Google listing.',
+  },
+  {
+    src: interior,
+    alt: 'Interior carpet lifted while a car is prepared.',
+    caption: 'Interior work with the carpet lifted. Photo from the Google listing.',
+  },
+  {
+    src: fiat,
+    alt: 'White Fiat 500 inside the workshop.',
+    caption: 'A white Fiat 500 in the workshop. Photo from the Google listing.',
+  },
+];
+---
+
+<Base
+  title="Recent work"
+  description={description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Projects', path: 'projects/' },
+  ]}
+>
+  <header class="page-hero">
+    <p class="kicker">Projects</p>
+    <h1>Work buyers wrote about</h1>
+    <p>
+      These notes come from public Google reviews. The photos are the images on the Google listing as of 12 October 2026. A photo does not mean that car is still for sale.
+    </p>
+  </header>
+  <div class="section gallery">
+    {
+      photos.map((photo, index) => (
+        <figure>
+          <div class="frame">
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              widths={[480, 900, 1400]}
+              sizes={index === 0 ? '(min-width: 800px) 55vw, 100vw' : '(min-width: 800px) 35vw, 100vw'}
+              quality={70}
+              format="webp"
+            />
+          </div>
+          <figcaption>{photo.caption}</figcaption>
+        </figure>
+      ))
+    }
+  </div>
+  <div class="section project-list">
+    {
+      projects.map((project) => (
+        <article class="project">
+          <div>
+            <p class="kicker">{project.when}</p>
+            <h2>{project.title}</h2>
+          </div>
+          <div>
+            <p>{project.summary}</p>
+            <p>{project.detail}</p>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Base>

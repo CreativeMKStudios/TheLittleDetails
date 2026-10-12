@@ -1,0 +1,56 @@
+---
+import Icon from '../components/Icon.astro';
+import Base from '../layouts/Base.astro';
+import { business } from '../data/business';
+import { highlights, reviews } from '../data/reviews';
+
+const description =
+  'Public Google reviews for The Little Details in Sandy. The listing showed 5.0 from 46 reviews on 12 October 2026.';
+---
+
+<Base
+  title="Google reviews"
+  description={description}
+  crumbs={[
+    { name: 'Home', path: '' },
+    { name: 'Reviews', path: 'reviews/' },
+  ]}
+>
+  <header class="page-hero">
+    <p class="kicker">Reviews</p>
+    <h1>5.0 from 46 Google reviews</h1>
+    <p>
+      That score was on the Google listing on {business.ratingChecked}. The quotes below are the reviews we could read in full. Open Google for the rest, including any newer notes.
+    </p>
+  </header>
+  <section class="section prose">
+    <h2>Lines Google highlights</h2>
+    <div class="highlights">
+      {
+        highlights.map((line) => (
+          <blockquote class="highlight">
+            <p>{line}</p>
+          </blockquote>
+        ))
+      }
+    </div>
+    <p>
+      <a href={business.mapsUrl}>Read the listing on Google</a>
+    </p>
+  </section>
+  <section class="section review-grid" aria-label="Quoted reviews">
+    {
+      reviews.map((review) => (
+        <article class="review">
+          <div class="stars" aria-label="5 out of 5 on Google">
+            <Icon name="star" /><Icon name="star" /><Icon name="star" /><Icon name="star" /><Icon name="star" />
+          </div>
+          <blockquote>
+            <p>{review.quote}</p>
+          </blockquote>
+          <footer>{review.name}, {review.date}</footer>
+        </article>
+      ))
+    }
+  </section>
+</Base>
